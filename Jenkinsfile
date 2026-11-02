@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'mykubeapp' }
+    agent { label 'devops-platform-lab-local' }
     options {
         disableConcurrentBuilds()
         timeout(time: 30, unit: 'MINUTES')
@@ -9,7 +9,7 @@ pipeline {
                      description: 'Deploy to the dedicated kind cluster on this agent')
     }
     environment {
-        CLUSTER_NAME = 'mykubeapp-build'
+        CLUSTER_NAME = 'devops-platform-lab-local-build'
     }
     stages {
         stage('Test') {

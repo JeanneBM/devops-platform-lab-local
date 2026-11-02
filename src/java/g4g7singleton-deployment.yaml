@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: g4g7singleton
-          image: mykubeapp/g4g7singleton:dev
+          image: devops-platform-lab-local/g4g7singleton:dev
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

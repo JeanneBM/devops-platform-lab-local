@@ -19,6 +19,6 @@ Developer tools and tests stay outside the runtime image.
 Standalone image build, from this directory:
 
 ```bash
-docker build -t mykubeapp/pycalculator:dev .
-docker run --rm -p 127.0.0.1:5000:5000 mykubeapp/pycalculator:dev
+docker build -t devops-platform-lab-local/pycalculator:dev .
+docker run --rm -p 127.0.0.1:5000:5000 devops-platform-lab-local/pycalculator:dev
 ```

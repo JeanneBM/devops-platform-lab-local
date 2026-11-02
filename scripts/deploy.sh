@@ -32,12 +32,12 @@ context="kind-$CLUSTER_NAME"
 kubectl --context "$context" cluster-info >/dev/null
 bash scripts/build.sh
 kind load docker-image --name "$CLUSTER_NAME" \
-    "mykubeapp/pycalculator:$IMAGE_TAG" "mykubeapp/g4g7singleton:$IMAGE_TAG"
+    "devops-platform-lab-local/pycalculator:$IMAGE_TAG" "devops-platform-lab-local/g4g7singleton:$IMAGE_TAG"
 manifest=$(mktemp)
 trap 'rm -f "$manifest"' EXIT
 kubectl kustomize k8s | sed \
-    -e "s|mykubeapp/pycalculator:dev|mykubeapp/pycalculator:$IMAGE_TAG|g" \
-    -e "s|mykubeapp/g4g7singleton:dev|mykubeapp/g4g7singleton:$IMAGE_TAG|g" > "$manifest"
+    -e "s|devops-platform-lab-local/pycalculator:dev|devops-platform-lab-local/pycalculator:$IMAGE_TAG|g" \
+    -e "s|devops-platform-lab-local/g4g7singleton:dev|devops-platform-lab-local/g4g7singleton:$IMAGE_TAG|g" > "$manifest"
 kubectl --context "$context" apply -f "$manifest"
 kubectl --context "$context" -n python rollout status deployment/pycalculator-deployment --timeout=180s
 kubectl --context "$context" -n java rollout status deployment/g4g7singleton-deployment --timeout=180s

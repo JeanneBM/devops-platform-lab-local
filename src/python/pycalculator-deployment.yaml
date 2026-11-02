@@ -22,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: pycalculator
-          image: mykubeapp/pycalculator:dev
+          image: devops-platform-lab-local/pycalculator:dev
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000

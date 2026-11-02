@@ -21,12 +21,12 @@ GitHub Actions provides automatic tests, integration deployment and image publis
 The root `Jenkinsfile` is an alternative for a locally managed Jenkins build agent:
 
 1. Install the Pipeline and Git plugins using the plugin manager.
-2. Add a trusted external agent labeled `mykubeapp`. Install Git, Python 3.12,
+2. Add a trusted external agent labeled `devops-platform-lab-local`. Install Git, Python 3.12,
    JDK 21, Docker, kind v0.33.0, kubectl v1.35.8 and curl on that agent.
    Its account must have permission to use its own Docker daemon.
 3. Create a Pipeline job from SCM pointing to this repository and `Jenkinsfile`.
 4. Builds test both applications and build commit-tagged images.
-   Select `DEPLOY_LOCAL` to create/update the dedicated `mykubeapp-build` cluster
+   Select `DEPLOY_LOCAL` to create/update the dedicated `devops-platform-lab-local-build` cluster
    on that agent and run the HTTP smoke tests.
 
 Use a dedicated agent account and cluster. The Jenkins controller pod itself is
@@ -34,3 +34,9 @@ not a build agent and cannot create clusters. This keeps Docker privileges off
 the controller. Agent/job creation is an explicit initial setup step.
 
 For old PVCs and backup requirements, see the migration section in Manual.md.
+
+## Repository rename
+
+For an existing Jenkins agent, update its label to `devops-platform-lab-local`
+before running the renamed pipeline. The dedicated build cluster is now
+`devops-platform-lab-local-build`; the former cluster is not deleted automatically.

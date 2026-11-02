@@ -1,7 +1,9 @@
-# MyKubeApp 🚀
+# DevOps Platform Lab — Local 🚀
 
 A local Kubernetes lab with a Python calculator, a Java singleton greeting service
 and one Jenkins controller. Each component has its own namespace.
+
+Repository: `JeanneBM/devops-platform-lab-local`.
 
 ## Quick start
 
@@ -54,8 +56,8 @@ GitHub Actions runs these checks, builds both images, and deploys Python, Java a
 Jenkins into an isolated kind cluster. On a successful push to `main`, it publishes
 the **exact tested images** to GHCR, tagged with the full commit SHA:
 
-- `ghcr.io/jeannebm/jb-mykubeapp-pycalculator:<commit-sha>`
-- `ghcr.io/jeannebm/jb-mykubeapp-g4g7singleton:<commit-sha>`
+- `ghcr.io/jeannebm/devops-platform-lab-local-pycalculator:<commit-sha>`
+- `ghcr.io/jeannebm/devops-platform-lab-local-g4g7singleton:<commit-sha>`
 
 Package publishing requires repository Actions to have package write access.
 New GHCR packages may be private; set their visibility explicitly if needed.
