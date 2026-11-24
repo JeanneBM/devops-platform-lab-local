@@ -5,6 +5,30 @@ and one Jenkins controller. Each component has its own namespace.
 
 Repository: `JeanneBM/devops-platform-lab-local`.
 
+## Architecture
+
+Docker builds the applications and kind hosts all three workloads in separate namespaces. Local access uses port forwarding. CI verifies the deployment and publishes the tested application images on successful main pushes.
+
+```mermaid
+flowchart TD
+  OP(("Operator")) --> BOOT["entrypoint.sh: build and deploy"]
+  BOOT --> BUILD["Docker: Python and Java images"]
+  subgraph KIND["kind local-cluster"]
+    PY["python namespace: Flask calculator"]
+    JAVA["java namespace: Java greeting service"]
+    JENKINS["jenkins namespace: controller"]
+    JENKINS --> PVC[("Dynamic Jenkins PVC")]
+  end
+  BUILD -->|"load image"| PY
+  BUILD -->|"load image"| JAVA
+  BOOT -->|"Kustomize workloads"| KIND
+  OP --> PF["Loopback port forwarding"]
+  PF --> PY
+  PF --> JAVA
+  PF --> JENKINS
+  CI["GitHub Actions: tests and kind smoke"] -->|"successful main push"| GHCR[("GHCR: tested images by commit SHA")]
+```
+
 ## Quick start
 
 Install Docker, kind **v0.33.0**, and kubectl **v1.35.8** as described in [Manual.md](Manual.md).
