@@ -90,12 +90,13 @@ Local deployment does not require a registry account or credentials.
 ## Dynamic security testing
 
 [DAST documentation and findings](docs/security/dast.md) describe ZAP baseline
-and active scans of the running Flask calculator. The separate
+and active scans of the running Flask calculator. The reusable
 [DAST workflow](.github/workflows/dast.yml) builds the app from the checkout,
 uses a digest-pinned scanner and confines both containers to an internal Docker
 network. It preserves reports on success and failure and blocks medium/high
 findings unless covered by the documented, source-bound lab applicability review.
-Scanner errors, timeouts and missing reports fail closed.
+Scanner errors, timeouts and missing reports fail closed. Main CI calls DAST
+and requires it to pass before publishing application images.
 
 ```bash
 bash scripts/dast.sh baseline

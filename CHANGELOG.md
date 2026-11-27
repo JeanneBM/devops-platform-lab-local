@@ -1,6 +1,7 @@
 ## Unreleased
 
 Fixed:
+* Calculator CSP, anti-clickjacking and content-type headers; local CSS replaces unverified CDN/inline styles.
 * Python startup, validation and error responses; Gunicorn runtime and health endpoint.
 * Java source builds on Java 21 and correct executable JAR; HTTP greeting adapter.
 * CI dependency paths, meaningful tests and full kind integration checks.
@@ -9,6 +10,7 @@ Fixed:
 * One Kustomize resource tree and executable host deployment/verification scripts.
 
 Changed:
+* Add isolated baseline/active ZAP scans, retained reports, source-bound lab finding reviews and a DAST prerequisite for image publishing.
 * Removed privileged Docker-in-Docker bootstrap and precompiled Java artifact.
 * Replaced LoadBalancer/Ingress assumptions with local ClusterIP port forwarding.
 * Replaced static Minikube storage and duplicate Jenkins manifests with kind's standard PVC.

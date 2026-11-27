@@ -11,6 +11,8 @@
   ],
   "owner": "JeanneBM",
   "review_by": "2026-12-27",
-  "application_sha256": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e",
-  "reason": "This disposable calculator has no authentication, session cookies, saved calculations, database or authority-dependent side effects. POST /calculations only returns a calculated result. Re-review before adding authentication, persistence, side effects or changing the reviewed application source. This is a lab applicability review, not enterprise risk acceptance."
+  "reason": "This disposable calculator has no authentication, session cookies, saved calculations, database or authority-dependent side effects. POST /calculations only returns a calculated result. Re-review before adding authentication, persistence, side effects or changing the reviewed application source. This is a lab applicability review, not enterprise risk acceptance.",
+  "source_sha256": {
+    "src/python/app.py": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e"
+  }
 }

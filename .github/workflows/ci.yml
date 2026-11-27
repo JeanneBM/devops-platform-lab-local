@@ -79,8 +79,13 @@ jobs:
       - name: Remove disposable CI cluster
         if: always()
         run: kind delete cluster --name "$CLUSTER_NAME"
+  dast:
+    needs: unit
+    uses: ./.github/workflows/dast.yml
+    permissions:
+      contents: read
   publish:
-    needs: integration
+    needs: [integration, dast]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10

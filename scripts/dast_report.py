@@ -7,22 +7,30 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 
-def assess(report, scanner_exit, review=None, source_hash=None, today=None):
+def assess(report, scanner_exit, reviews=(), source_hashes=None, today=None):
     if scanner_exit not in (0, 1, 2):
         raise ValueError(f'Scanner failed or timed out (exit {scanner_exit}).')
     if not isinstance(report, dict):
         raise ValueError('Expected a ZAP report object.')
     sites = report.get('site')
-    if not isinstance(sites, list) or len(sites) != 1:
-        raise ValueError('Expected exactly one scanned site.')
-    site = sites[0]
-    if not isinstance(site, dict):
-        raise ValueError('Invalid scanned site.')
-    if site.get('@host') != 'calculator' or str(site.get('@port')) != '5000':
-        raise ValueError('Report does not describe the disposable calculator.')
-    alerts = site.get('alerts')
-    if not isinstance(alerts, list):
-        raise ValueError('Report has no alert list.')
+    if not isinstance(sites, list) or not sites:
+        raise ValueError('Expected the scanned calculator site.')
+    alerts = []
+    origins = set()
+    for site in sites:
+        if not isinstance(site, dict):
+            raise ValueError('Invalid scanned site.')
+        origin = site.get('@name')
+        if (origin not in ('http://calculator:5000', 'https://calculator:5000')
+                or site.get('@host') != 'calculator' or str(site.get('@port')) != '5000'
+                or origin in origins):
+            raise ValueError('Report contains an unexpected or duplicate target.')
+        origins.add(origin)
+        if not isinstance(site.get('alerts'), list):
+            raise ValueError('Report has no alert list.')
+        alerts.extend(site['alerts'])
+    if 'http://calculator:5000' not in origins:
+        raise ValueError('Report does not contain the HTTP calculator target.')
     findings = []
     for alert in alerts:
         risk = int(alert['riskcode'])
@@ -33,8 +41,10 @@ def assess(report, scanner_exit, review=None, source_hash=None, today=None):
             'risk': risk, 'instances': alert.get('instances', []),
             'disposition': 'blocking' if risk >= 2 else 'review',
         }
-        # One reviewed, source-bound lab finding; never suppress a scanner rule globally.
-        if review and finding['rule'] == review['rule'] and risk <= 2:
+        # Source-bound lab reviews retain the original rule, risk and evidence.
+        for review in reviews:
+            if finding['rule'] != review['rule'] or risk > 2:
+                continue
             current_date = today or datetime.now(timezone.utc).date()
             scope_matches = bool(finding['instances']) and all(
                 urlsplit(i['uri']).scheme == 'http'
@@ -43,10 +53,14 @@ def assess(report, scanner_exit, review=None, source_hash=None, today=None):
                 and i['method'] in review['methods']
                 for i in finding['instances']
             )
-            if (scope_matches and source_hash == review['application_sha256']
+            source_matches = bool(review['source_sha256']) and all(
+                (source_hashes or {}).get(path) == digest
+                for path, digest in review['source_sha256'].items()
+            )
+            if (scope_matches and source_matches
                     and current_date < date.fromisoformat(review['review_by'])
                     and review['owner'] and review['reason']):
-                finding.update(disposition='not-applicable-to-stateless-lab', review=review)
+                finding.update(disposition=review['classification'], review=review)
         findings.append(finding)
     return findings
 
@@ -68,15 +82,25 @@ def main():
     try:
         report = json.loads(args.report.read_text())
         root = Path(__file__).resolve().parents[1]
-        review_path = root / '.zap/stateless-csrf-review.json'
-        review = json.loads(review_path.read_text()) if review_path.exists() else None
-        if review and (review['rule'] != '10202' or review['classification'] != 'not-applicable'):
-            raise ValueError('Unsupported lab finding review.')
-        source_hash = hashlib.sha256((root / 'src/python/app.py').read_bytes()).hexdigest()
-        findings = assess(report, args.scanner_exit, review, source_hash)
+        reviews = []
+        allowed = {'10202': ('not-applicable', {'src/python/app.py'}),
+                   '10106': ('isolated-lab-transport', {'src/python/app.py', 'scripts/dast.sh'})}
+        for filename in ('stateless-csrf-review.json', 'internal-http-review.json'):
+            review_path = root / '.zap' / filename
+            if review_path.exists():
+                review = json.loads(review_path.read_text())
+                expected = allowed.get(review['rule'])
+                if (not expected or review['classification'] != expected[0]
+                        or set(review['source_sha256']) != expected[1]):
+                    raise ValueError('Unsupported lab finding review.')
+                reviews.append(review)
+        source_hashes = {path: hashlib.sha256((root / path).read_bytes()).hexdigest()
+                         for path in ('src/python/app.py', 'scripts/dast.sh')}
+        findings = assess(report, args.scanner_exit, reviews, source_hashes)
         blocking = [f for f in findings if f['disposition'] == 'blocking']
         summary.update(status='FAIL' if blocking else 'PASS',
                        zap_version=report.get('@version'), findings=findings,
+                       reported_origins=[site['@name'] for site in report['site']],
                        blocking_rules=[f['rule'] for f in blocking])
         status = 1 if blocking else 0
     except (OSError, ValueError, KeyError, TypeError) as exc:
