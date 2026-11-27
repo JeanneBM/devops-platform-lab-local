@@ -1,0 +1,10 @@
+:root { font-family: system-ui, sans-serif; color: #17212f; background: #f4f6fa; }
+body { margin: 0; padding: 2rem 1rem; }
+.container { max-width: 36rem; margin: 0 auto; }
+h3 { font-size: 1.8rem; }
+form { display: grid; gap: .75rem; padding: 1.5rem; background: white; border-radius: .5rem; }
+label { font-weight: 600; }
+input, select { box-sizing: border-box; width: 100%; padding: .75rem; font: inherit; }
+input[type=submit] { margin-top: .5rem; background: #244fbd; color: white; border: 0; border-radius: .25rem; cursor: pointer; }
+.alert { padding: 1rem; border-radius: .25rem; background: #e7efff; overflow-wrap: anywhere; }
+.alert[role=alert] { background: #ffe8e8; }

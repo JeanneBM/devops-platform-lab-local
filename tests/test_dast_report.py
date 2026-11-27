@@ -1,4 +1,5 @@
 import importlib.util
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -36,3 +37,36 @@ def test_scanner_errors_and_timeouts_never_pass(exit_code):
 def test_missing_or_wrong_target_never_passes(data):
     with pytest.raises(ValueError):
         dast_report.assess(data, 0)
+
+
+def csrf_review():
+    return {'rule': '10202', 'paths': ['/', '/calculations'], 'methods': ['GET', 'POST'],
+            'application_sha256': 'reviewed-source', 'review_by': '2026-12-27',
+            'owner': 'JeanneBM', 'reason': 'Stateless calculation, no user authority or saved state.'}
+
+
+def csrf_report(path='/calculations', risk=2):
+    data = report(risk)
+    alert = data['site'][0]['alerts'][0]
+    alert.update(pluginid='10202', name='Absence of Anti-CSRF Tokens', instances=[
+        {'uri': 'http://calculator:5000' + path, 'method': 'POST'}
+    ])
+    return data
+
+
+def test_review_retains_original_risk_and_evidence():
+    finding = dast_report.assess(csrf_report(), 2, csrf_review(), 'reviewed-source', date(2026, 11, 27))[0]
+    assert finding['risk'] == 2
+    assert finding['instances']
+    assert finding['disposition'] == 'not-applicable-to-stateless-lab'
+
+
+@pytest.mark.parametrize('path,risk,source,today', [
+    ('/new-action', 2, 'reviewed-source', date(2026, 11, 27)),
+    ('/calculations', 3, 'reviewed-source', date(2026, 11, 27)),
+    ('/calculations', 2, 'changed-source', date(2026, 11, 27)),
+    ('/calculations', 2, 'reviewed-source', date(2026, 12, 27)),
+])
+def test_review_never_covers_other_paths_high_risk_changed_code_or_expiry(path, risk, source, today):
+    finding = dast_report.assess(csrf_report(path, risk), 2, csrf_review(), source, today)[0]
+    assert finding['disposition'] == 'blocking'
