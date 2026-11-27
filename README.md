@@ -87,6 +87,28 @@ Package publishing requires repository Actions to have package write access.
 New GHCR packages may be private; set their visibility explicitly if needed.
 Local deployment does not require a registry account or credentials.
 
+## Dynamic security testing
+
+[DAST documentation and findings](docs/security/dast.md) describe ZAP baseline
+and active scans of the running Flask calculator. The reusable
+[DAST workflow](.github/workflows/dast.yml) builds the app from the checkout,
+uses a digest-pinned scanner and confines both containers to an internal Docker
+network. It preserves reports on success and failure and blocks medium/high
+findings unless covered by the documented, source-bound lab applicability review.
+Scanner errors, timeouts and missing reports fail closed. Main CI calls DAST
+and requires it to pass before publishing application images.
+
+```bash
+bash scripts/dast.sh baseline
+bash scripts/dast.sh full
+```
+
+Verified on 27 November 2026: the initial baseline found four medium rules and
+failed the gate. After remediation, baseline and active scans passed with zero
+unreviewed medium/high findings. The reports still show the scoped CSRF review
+and HTTP-only lab transport exception; see the linked evidence record and expiry
+conditions. Unit tests and kind integration also passed.
+
 The Jenkins controller keeps the normal setup wizard enabled; no default admin
 password is committed. See [Jenkins setup](src/jenkins/README.md) for optional builds.
 

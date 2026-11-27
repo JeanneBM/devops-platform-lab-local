@@ -6,6 +6,19 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
+@app.after_request
+def security_headers(response):
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'none'; style-src 'self'; form-action 'self'; "
+        "frame-ancestors 'none'; base-uri 'none'"
+    )
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Referrer-Policy'] = 'no-referrer'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+
 @app.route('/')
 def main():
     return render_template('app.html')

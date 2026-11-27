@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-27",
+  "repository": "JeanneBM/devops-platform-lab-local",
+  "stages": [
+    {
+      "stage": "before-baseline",
+      "workflow_run": 45989702697,
+      "run_url": "https://github.com/JeanneBM/devops-platform-lab-local/actions/runs/45989702697",
+      "pr_head": "8cc4274170d7eac4591d51544b20fa34358a2180",
+      "checkout_commit": "0cbe85877b4330a9acaf41b038f35515818f236d",
+      "gate_status": "FAIL",
+      "scanner_exit": 2,
+      "artifact_id": 15192587896,
+      "artifact_zip_sha256": "3e353a806b2bbc2ac2e1129f197a4acc0bdaafbfd8ad1308feb0c779989d584f",
+      "files": {
+        "before-baseline-zap.json": {
+          "sha256": "f95694695bc8022bb5e989eb0861c6935146248ea9b2ec7bd9dc19e60e4e0200",
+          "size_bytes": 20066
+        },
+        "before-baseline-summary.json": {
+          "sha256": "f9b138c5a08227ffa0ccfed5aa62d45e62a04dac7636bdf6e0abeed490e5217c",
+          "size_bytes": 9145
+        }
+      }
+    },
+    {
+      "stage": "first-full",
+      "workflow_run": 45990489083,
+      "run_url": "https://github.com/JeanneBM/devops-platform-lab-local/actions/runs/45990489083",
+      "pr_head": "eb18a5b130fef858abf83fd9de5d63002b0f2c36",
+      "checkout_commit": "007cedab49145069662209cdb41a8f26a62716be",
+      "gate_status": "ERROR",
+      "scanner_exit": 2,
+      "artifact_id": 15192589077,
+      "artifact_zip_sha256": "9f808d3b2b67bd87f5c20dfec7ce4a7a8f3923137ad4f5d4c11f599318fd8184",
+      "files": {
+        "first-full-zap.json": {
+          "sha256": "0cff88a1d22ed35b3359f46569134f444484e3acb4d91f6f2aa88be6fbcfc6d3",
+          "size_bytes": 11708
+        },
+        "first-full-summary.json": {
+          "sha256": "8c435753a67612f5bc1a6f9c5d66f1ebb7d98b841e49c12e15b7421e60977c49",
+          "size_bytes": 416
+        }
+      }
+    },
+    {
+      "stage": "after-baseline",
+      "workflow_run": 45991438863,
+      "run_url": "https://github.com/JeanneBM/devops-platform-lab-local/actions/runs/45991438863",
+      "pr_head": "c903acec41572e2d2c06014a5b702637812b0e92",
+      "checkout_commit": "89c6635cdf3d3be2252282d9f5f98e759fe059b0",
+      "gate_status": "PASS",
+      "scanner_exit": 2,
+      "artifact_id": 15193733150,
+      "artifact_zip_sha256": "bb87fcc2bc57e3ae85abc8082c7b6d105ef3e55d5860be09cdb189305c7ba9f0",
+      "files": {
+        "after-baseline-zap.json": {
+          "sha256": "50ce7418ca92055f878c4521ee89cabc41a7253848c9eef9befc8447a84c11b2",
+          "size_bytes": 9890
+        },
+        "after-baseline-summary.json": {
+          "sha256": "13cde69018b350848fe21685241cb064a6d3aa09aaa8aa0b59dad5d4fc604331",
+          "size_bytes": 4210
+        }
+      }
+    },
+    {
+      "stage": "after-full",
+      "workflow_run": 45991438863,
+      "run_url": "https://github.com/JeanneBM/devops-platform-lab-local/actions/runs/45991438863",
+      "pr_head": "c903acec41572e2d2c06014a5b702637812b0e92",
+      "checkout_commit": "89c6635cdf3d3be2252282d9f5f98e759fe059b0",
+      "gate_status": "PASS",
+      "scanner_exit": 2,
+      "artifact_id": 15193229503,
+      "artifact_zip_sha256": "aa4ab5591f2ceb7ed98295528d5c7adf795007cab50ae9d666959cb8b17fb3e1",
+      "files": {
+        "after-full-zap.json": {
+          "sha256": "0d7974a935c612c93fb61bb72963872424607e0b7da39a27c9ecfe32be1ffc01",
+          "size_bytes": 11707
+        },
+        "after-full-summary.json": {
+          "sha256": "0dc3b644756a34c8f8f0a4c8f42dc3088dceb03ae2c175fd5b2b326ce55adfe1",
+          "size_bytes": 5641
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "mode": "full",
+  "target": "http://calculator:5000",
+  "source_commit": "007cedab49145069662209cdb41a8f26a62716be",
+  "scanner_image": "ghcr.io/zaproxy/zaproxy@sha256:9624669db72f54d86c4b46a7064518bd9bf79d8c61a4c31befa9923489f328af",
+  "scanner_exit": 2,
+  "policy": "Fail on medium/high unless covered by the current, scoped lab review.",
+  "status": "ERROR",
+  "error": "Expected exactly one scanned site."
+}

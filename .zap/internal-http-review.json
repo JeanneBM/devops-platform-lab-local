@@ -1,0 +1,17 @@
+{
+  "rule": "10106",
+  "classification": "isolated-lab-transport",
+  "paths": [
+    "/"
+  ],
+  "methods": [
+    "GET"
+  ],
+  "owner": "JeanneBM",
+  "review_by": "2026-12-27",
+  "source_sha256": {
+    "src/python/app.py": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e",
+    "scripts/dast.sh": "05458740339bb66947298e92c60436c05c69de796089db47eabffc7ac760c45e"
+  },
+  "reason": "HTTP is deliberately used only between the disposable scanner and unauthenticated stateless calculator on a Docker internal network, with no published host ports, credentials or customer data. This is a documented lab transport exception, not production TLS verification. Re-review before exposing a port, adding sensitive data/authentication or changing the reviewed application/runner source."
+}
