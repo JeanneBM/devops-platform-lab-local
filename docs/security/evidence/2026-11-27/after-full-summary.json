@@ -1,0 +1,126 @@
+{
+  "mode": "full",
+  "target": "http://calculator:5000",
+  "source_commit": "89c6635cdf3d3be2252282d9f5f98e759fe059b0",
+  "scanner_image": "ghcr.io/zaproxy/zaproxy@sha256:9624669db72f54d86c4b46a7064518bd9bf79d8c61a4c31befa9923489f328af",
+  "scanner_exit": 2,
+  "policy": "Fail on medium/high unless covered by the current, scoped lab review.",
+  "status": "PASS",
+  "zap_version": "2.17.0",
+  "findings": [
+    {
+      "rule": "10202",
+      "name": "Absence of Anti-CSRF Tokens",
+      "risk": 2,
+      "instances": [
+        {
+          "id": "1",
+          "uri": "http://calculator:5000",
+          "nodeName": "http://calculator:5000",
+          "method": "GET",
+          "param": "",
+          "attack": "",
+          "evidence": "<form action=\"/calculations\" method=\"POST\">",
+          "otherinfo": "No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: \"calc_btn\" \"x\" \"y\" ]."
+        },
+        {
+          "id": "0",
+          "uri": "http://calculator:5000/",
+          "nodeName": "http://calculator:5000/",
+          "method": "GET",
+          "param": "",
+          "attack": "",
+          "evidence": "<form action=\"/calculations\" method=\"POST\">",
+          "otherinfo": "No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: \"calc_btn\" \"x\" \"y\" ]."
+        },
+        {
+          "id": "3",
+          "uri": "http://calculator:5000/calculations",
+          "nodeName": "http://calculator:5000/calculations ()(operation,x,y)",
+          "method": "POST",
+          "param": "",
+          "attack": "",
+          "evidence": "<form action=\"/calculations\" method=\"POST\">",
+          "otherinfo": "No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: \"calc_btn\" \"x\" \"y\" ]."
+        }
+      ],
+      "disposition": "not-applicable",
+      "review": {
+        "rule": "10202",
+        "classification": "not-applicable",
+        "paths": [
+          "/",
+          "/calculations"
+        ],
+        "methods": [
+          "GET",
+          "POST"
+        ],
+        "owner": "JeanneBM",
+        "review_by": "2026-12-27",
+        "reason": "This disposable calculator has no authentication, session cookies, saved calculations, database or authority-dependent side effects. POST /calculations only returns a calculated result. Re-review before adding authentication, persistence, side effects or changing the reviewed application source. This is a lab applicability review, not enterprise risk acceptance.",
+        "source_sha256": {
+          "src/python/app.py": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e"
+        }
+      }
+    },
+    {
+      "rule": "10106",
+      "name": "HTTP Only Site",
+      "risk": 2,
+      "instances": [
+        {
+          "id": "5",
+          "uri": "http://calculator:5000/",
+          "nodeName": "https://calculator:5000/",
+          "method": "GET",
+          "param": "",
+          "attack": "",
+          "evidence": "",
+          "otherinfo": "Failed to connect.\nZAP attempted to connect via: https://calculator:5000/"
+        }
+      ],
+      "disposition": "isolated-lab-transport",
+      "review": {
+        "rule": "10106",
+        "classification": "isolated-lab-transport",
+        "paths": [
+          "/"
+        ],
+        "methods": [
+          "GET"
+        ],
+        "owner": "JeanneBM",
+        "review_by": "2026-12-27",
+        "source_sha256": {
+          "src/python/app.py": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e",
+          "scripts/dast.sh": "05458740339bb66947298e92c60436c05c69de796089db47eabffc7ac760c45e"
+        },
+        "reason": "HTTP is deliberately used only between the disposable scanner and unauthenticated stateless calculator on a Docker internal network, with no published host ports, credentials or customer data. This is a documented lab transport exception, not production TLS verification. Re-review before exposing a port, adding sensitive data/authentication or changing the reviewed application/runner source."
+      }
+    },
+    {
+      "rule": "10031",
+      "name": "User Controllable HTML Element Attribute (Potential XSS)",
+      "risk": 0,
+      "instances": [
+        {
+          "id": "4",
+          "uri": "http://calculator:5000/calculations",
+          "nodeName": "http://calculator:5000/calculations ()(operation,x,y)",
+          "method": "POST",
+          "param": "operation",
+          "attack": "",
+          "evidence": "",
+          "otherinfo": "User-controlled HTML attribute values were found. Try injecting special characters to see if XSS might be possible. The page at the following URL:\n\nhttp://calculator:5000/calculations\n\nappears to include user input in:\na(n) [option] tag [value] attribute\n\nThe user input found was:\noperation=subtraction\n\nThe user-controlled value was:\nsubtraction"
+        }
+      ],
+      "disposition": "review"
+    }
+  ],
+  "reported_origins": [
+    "https://calculator:5000",
+    "http://calculator:5000"
+  ],
+  "blocking_rules": []
+}

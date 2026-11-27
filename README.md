@@ -103,8 +103,11 @@ bash scripts/dast.sh baseline
 bash scripts/dast.sh full
 ```
 
-The initial baseline found four medium rules and correctly failed the gate.
-Remediation and final verification are tracked in the linked evidence record.
+Verified on 27 November 2026: the initial baseline found four medium rules and
+failed the gate. After remediation, baseline and active scans passed with zero
+unreviewed medium/high findings. The reports still show the scoped CSRF review
+and HTTP-only lab transport exception; see the linked evidence record and expiry
+conditions. Unit tests and kind integration also passed.
 
 The Jenkins controller keeps the normal setup wizard enabled; no default admin
 password is committed. See [Jenkins setup](src/jenkins/README.md) for optional builds.

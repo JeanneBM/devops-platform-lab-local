@@ -1,8 +1,8 @@
 {
 	"@programName": "ZAP",
 	"@version": "2.17.0",
-	"@generated": "Fri, 27 Nov 2026 11:27:22",
-	"created": "2026-11-27T11:27:22.601470342Z",
+	"@generated": "Fri, 27 Nov 2026 11:34:34",
+	"created": "2026-11-27T11:34:34.352023086Z",
 	"insights":[
 		{
 			"level": "Low",
@@ -10,7 +10,7 @@
 			"site": "",
 			"key": "insight.log.error",
 			"description": "ZAP errors logged - see the zap.log file for details",
-			"statistic": "12"
+			"statistic": "13"
 		},
 		{
 			"level": "Info",
@@ -18,7 +18,7 @@
 			"site": "",
 			"key": "insight.network.failure",
 			"description": "Percentage of network failures",
-			"statistic": "61"
+			"statistic": "63"
 		},
 		{
 			"level": "Info",
@@ -132,7 +132,7 @@
 					"reference": "<p>https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html</p><p>https://cwe.mitre.org/data/definitions/352.html</p>",
 					"cweid": "352",
 					"wascid": "9",
-					"sourceid": "9"
+					"sourceid": "10"
 				},
 				{
 					"pluginid": "10031",

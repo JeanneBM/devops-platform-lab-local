@@ -8,7 +8,8 @@ Java application, authenticated service or third-party site is a scan target.
 
 ## Run and inspect
 
-Requirements: Git, Docker with Linux containers, Bash, GNU timeout and Python 3.
+Requirements: Git, Docker with Linux containers, Linux Bash (Ubuntu or WSL2),
+GNU timeout and Python 3. CI executes on Ubuntu 24.04.
 
 ```bash
 bash scripts/dast.sh baseline
@@ -97,7 +98,26 @@ included the scanner's HTTPS probe as a second site. The raw report and error
 summary are retained as `first-full-*`. The parser now accepts only HTTP/HTTPS
 entries for the same calculator host/port, retains all their alerts, and rejects
 unexpected targets. The separate HTTP lab review documents the transport limit.
-The final live CI results will be recorded after the corrected gate is rerun.
+
+Final verification: [CI run 45991438863](https://github.com/JeanneBM/devops-platform-lab-local/actions/runs/45991438863),
+PR head `c903acec41572e2d2c06014a5b702637812b0e92`, checked-out merge commit
+`89c6635cdf3d3be2252282d9f5f98e759fe059b0`. Unit tests (44 Python cases and
+Java checks), kind integration, baseline ZAP and full active ZAP all passed.
+Image publishing was correctly skipped for this pull-request event.
+
+| Scan | Raw medium findings | Unreviewed medium/high | Gate |
+| --- | --- | --- | --- |
+| Before: baseline | 4 | 4 | FAIL |
+| After: baseline | 1 (10202) | 0 | PASS |
+| After: full active | 2 (10202, 10106) | 0 | PASS |
+
+Informational 10031 remains in both final reports. Neither the contextual CSRF
+finding nor the HTTP-only transport is described as fixed. The reports retain
+the original severities, evidence and source-bound review decisions.
+
+The [evidence manifest](evidence/2026-11-27/manifest.json) maps each retained raw
+report/summary to its run, PR head, checkout commit, artifact and SHA-256. Git
+retains these JSON files after the 30-day Actions artifact retention expires.
 
 ## Explaining the decisions
 

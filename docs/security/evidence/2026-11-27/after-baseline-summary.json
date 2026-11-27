@@ -1,7 +1,7 @@
 {
   "mode": "baseline",
   "target": "http://calculator:5000",
-  "source_commit": "007cedab49145069662209cdb41a8f26a62716be",
+  "source_commit": "89c6635cdf3d3be2252282d9f5f98e759fe059b0",
   "scanner_image": "ghcr.io/zaproxy/zaproxy@sha256:9624669db72f54d86c4b46a7064518bd9bf79d8c61a4c31befa9923489f328af",
   "scanner_exit": 2,
   "policy": "Fail on medium/high unless covered by the current, scoped lab review.",
@@ -44,7 +44,7 @@
           "otherinfo": "No known Anti-CSRF token [anticsrf, CSRFToken, __RequestVerificationToken, csrfmiddlewaretoken, authenticity_token, OWASP_CSRFTOKEN, anoncsrf, csrf_token, _csrf, _csrfSecret, __csrf_magic, CSRF, _token, _csrf_token, _csrfToken] was found in the following HTML form: [Form 1: \"calc_btn\" \"x\" \"y\" ]."
         }
       ],
-      "disposition": "not-applicable-to-stateless-lab",
+      "disposition": "not-applicable",
       "review": {
         "rule": "10202",
         "classification": "not-applicable",
@@ -58,8 +58,10 @@
         ],
         "owner": "JeanneBM",
         "review_by": "2026-12-27",
-        "application_sha256": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e",
-        "reason": "This disposable calculator has no authentication, session cookies, saved calculations, database or authority-dependent side effects. POST /calculations only returns a calculated result. Re-review before adding authentication, persistence, side effects or changing the reviewed application source. This is a lab applicability review, not enterprise risk acceptance."
+        "reason": "This disposable calculator has no authentication, session cookies, saved calculations, database or authority-dependent side effects. POST /calculations only returns a calculated result. Re-review before adding authentication, persistence, side effects or changing the reviewed application source. This is a lab applicability review, not enterprise risk acceptance.",
+        "source_sha256": {
+          "src/python/app.py": "be2ba65d074b549ff41480de2abf0c45a17f1fc95c9fc622bf890050a3eb715e"
+        }
       }
     },
     {
@@ -80,6 +82,9 @@
       ],
       "disposition": "review"
     }
+  ],
+  "reported_origins": [
+    "http://calculator:5000"
   ],
   "blocking_rules": []
 }
